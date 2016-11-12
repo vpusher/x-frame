@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+        <link rel="import" href="../x-frame.html" />
+        <style type="text/css">
+            x-frame {
+                display: block;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <template id="t" is="dom-bind">
+            <h3>Frame 1</h3>
+            <x-frame id="frame1" src="frame.html" on-msg="log"></x-frame>
+            <input id="input1" type="text" placeholder="message to frame 1"/>
+            <button id="button1" ref="1" on-click="send">Send</button>
+            <h3>Frame 2</h3>
+            <x-frame id="frame2" src="frame.html" on-msg="log"></x-frame>
+            <input id="input2" type="text" placeholder="message to frame 2"/>
+            <button id="button2" ref="2" on-click="send">Send</button>
+            <hr>
+        </template>
+    </body>
+    <script>
+        var template = document.querySelector('#t');
+
+        template.log = function (event) {
+            var data = event.detail.data;
+            var output = 'From ' + event.target.id + ' (' + data.channel + '): ' + data.message;
+            console.log("x-frame received a message:");
+            console.log(event);
+            document.body.appendChild(document.createElement('BR'));
+            document.body.appendChild(document.createTextNode(output));
+        };
+
+        template.send = function (event) {
+            var ref = event.target.getAttribute('ref')
+            this.$['frame' + ref].send(this.$['input' + ref].value);
+        };
+    </script>
+</html>

@@ -1,0 +1,106 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="x-frame">
+
+    <template>
+        <style>
+            :host {
+            }
+
+            #frame {
+                display: block;
+            }
+        </style>
+
+        <iframe id="frame"
+                src$="{{src}}"
+                frameborder$="{{frameborder}}"
+                scrolling$="{{scrolling}}"
+                height$="{{height}}"
+                width$="{{width}}">
+        </iframe>
+
+    </template>
+
+    <script>
+
+
+/**
+ * Cross document communication with frame content made easy.
+ *
+ * @demo demo/index.html
+ */
+Polymer({
+    is: 'x-frame',
+
+    properties: {
+        /**
+         * `src` attribute of the nested iframe element.
+         */
+        src: {
+            type: String
+        },
+
+        /**
+         * `scrolling` attribute of the nested iframe element.
+         */
+        scrolling: {
+            type: String
+        },
+
+        /**
+         * `frameborder` attribute of the nested iframe element.
+         */
+        frameborder: {
+            type: Number
+        },
+
+        /**
+         * `height` attribute of the nested iframe element.
+         */
+        height: {
+            type: String
+        },
+
+        /**
+         * `width` attribute of the nested iframe element.
+         */
+        width: {
+            type: String
+        }
+    },
+
+    ready: function () {
+        window && this.listen(window, 'message', '_onMessage');
+    },
+
+    /**
+     * when the "x-frame" element receives a post message from the framed window.
+     *
+     * @event msg
+     */
+
+    /**
+     * Send a post message to the framed window.
+     * @param {Object} msg Object to be sent as post message.
+     * @param {String} channel send a message on a specific channel.
+     */
+    send: function (msg, channel) {
+        channel = channel || 'default';
+        msg && this.$.frame.contentWindow && this.$.frame.contentWindow.postMessage({ channel: channel, message: msg }, '*');
+    },
+
+    /**
+     * Called whenever a message from the framed window is received.
+     * @param {Event} event The post message event.
+     * @private
+     */
+    _onMessage: function (event) {
+        event.source === this.$.frame.contentWindow && this.fire('msg', event);
+    }
+
+});
+
+    </script>
+</dom-module>
+

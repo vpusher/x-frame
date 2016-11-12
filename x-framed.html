@@ -1,0 +1,57 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="x-framed">
+
+    <script>
+/**
+ * Cross document communication with the parent window.
+ *
+ * @demo demo/index.html
+ */
+Polymer({
+    is: 'x-framed',
+
+    properties: {
+        /**
+         * Channel to listen.
+         */
+        channel: {
+            type: String,
+            value: 'default'
+        }
+    },
+
+    ready: function () {
+        window && this.listen(window, 'message', '_onMessage');
+    },
+
+    /**
+     * when the "x-framed" element receives a post message from the parent window.
+     *
+     * @event msg
+     */
+
+
+    /**
+     * Send a post message to the parent window.
+     * @param {Object} msg Object to be sent as post message.
+     */
+    send: function (msg) {
+        msg && window.parent && window.parent.postMessage({ channel: this.channel, message: msg }, '*');
+    },
+
+    /**
+     * Called whenever a message from the parent window is received.
+     * @param {Event} event The post message event.
+     * @private
+     */
+    _onMessage: function (event) {
+        event.data && event.data.channel === this.channel && this.fire('msg', event);
+    }
+
+});
+
+    </script>
+
+</dom-module>
+

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../x-framed.html" />
+        <style type="text/css">
+        </style>
+    </head>
+    <body>
+        <template id="t" is="dom-bind">
+            <x-framed id="framed" on-msg="log"></x-framed>
+            <input id="input" type="text" placeholder="message to parent"/>
+            <button id="button" on-click="send">Send</button>
+        </template>
+    </body>
+    <script>
+        var template = document.querySelector('#t');
+
+        template.log = function (event) {
+            var data = event.detail.data;
+            var output = 'From parent (' + data.channel + '): ' + data.message;
+            console.log("x-framed received a message:");
+            console.log(event);
+            document.body.appendChild(document.createElement('BR'));
+            document.body.appendChild(document.createTextNode(output));
+        };
+
+        template.send = function () {
+            this.$.framed.send(this.$.input.value);
+        };
+    </script>
+</html>

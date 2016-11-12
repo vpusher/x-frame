@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <title>x-frame</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+
+    <link rel="import" href="../x-frame.html" />
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+</head>
+<body>
+
+<div class="vertical-section-container centered">
+    <h3>Frame sending messages both ways</h3>
+    <demo-snippet>
+        <template>
+            <template id="t" is="dom-bind">
+                <x-frame id="frame" src="frame.html" on-msg="alert"></x-frame>
+                <input id="input" type="text" placeholder="message to frame"/>
+                <button id="button" on-click="send">Send</button>
+            </template>
+            <script>
+                var template = document.querySelector('#t');
+
+                template.alert = function (event) {
+                    var data = event.detail.data;
+                    alert('From ' + event.target.id + ' (' + data.channel + '): ' + data.message);
+
+                };
+
+                template.send = function () {
+                    this.$.frame.send(this.$.input.value);
+                };
+            </script>
+        </template>
+    </demo-snippet>
+</div>
+
+</body>
+</html>

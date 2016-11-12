@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../x-frame.html">
+    <link rel="import" href="../x-framed.html">
+</head>
+<body>
+
+
+<x-frame src="frame.html", scrolling="yes" frameborder="0" width="100%" height="100%"></x-frame>
+<x-framed></x-framed>
+
+<script>
+    var xframe = document.querySelector('x-frame');
+    var xframed= document.querySelector('x-framed');
+
+    suite('<x-frame>', function() {
+
+        // Sanity test.
+        test('attribute "class" is not backported on the <iframe> element', function() {
+            assert.notEqual(xframe.$.frame.getAttribute('class'), '');
+        });
+
+        // Testing attribute backporting...
+        test('attribute "src" is backported on the <iframe> element', function() {
+            assert.equal(xframe.$.frame.getAttribute('src'), 'frame.html');
+        });
+
+        test('attribute "scrolling" is backported on the <iframe> element', function() {
+            assert.equal(xframe.$.frame.getAttribute('scrolling'), 'yes');
+        });
+
+        test('attribute "frameborder" is backported on the <iframe> element', function() {
+            assert.equal(xframe.$.frame.getAttribute('frameborder'), '0');
+        });
+
+        test('attribute "width" is backported on the <iframe> element', function() {
+            assert.equal(xframe.$.frame.getAttribute('width'), '100%');
+        });
+
+        test('attribute "height" is backported on the <iframe> element', function() {
+            assert.equal(xframe.$.frame.getAttribute('height'), '100%');
+        });
+
+    });
+
+    suite('<x-framed>', function() {
+
+        test('defines the default "channel" property', function() {
+            assert.equal(xframed.channel, 'default');
+        });
+
+    });
+</script>
+
+</body>
+</html>
