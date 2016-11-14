@@ -8,6 +8,7 @@
     "post-message",
     "messaging",
     "web-component",
+    "web-components",
     "polymer"
   ],
   "homepage": "https://github.com/vpusher/x-frame",
